@@ -62,7 +62,8 @@ pipeline {
 
   }
   tools {
-    maven 'Maven 3.6.3'
+    //maven 'Maven 3.6.3'
+    maven "Maven_Home"
   }
   environment {
     TESTER = 'placeholder'

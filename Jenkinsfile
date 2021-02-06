@@ -1,77 +1,32 @@
+#!groovy
+
 pipeline {
-  agent any
+  agent none
   stages {
-    stage('Build') {
+    stage('Maven Install') {
+      agent {
+        docker {
+          image 'maven:3.5.0'
+        }
+      }
       steps {
-        echo 'Initiating maven build'
-        //sh 'mvn clean install -Dlicense.skip=true'
-        bat 'mvn clean install -Dlicense.skip=true'
-        echo 'Maven build complete'
+        sh 'mvn clean install'
       }
     }
-
-    stage('Testing') {
-      parallel {
-        stage('Test') {
-          steps {
-            //sh 'mvn clean test'
-            bat 'mvn clean test'
-          }
-        }
-
-        stage('Print Tester credentials') {
-          steps {
-            sleep 10
-            echo "The tester is ${TESTER}"
-          }
-        }
-
-        stage('Print Build Number') {
-          steps {
-            sleep 20
-            echo "This is build number ${BUILD_ID}"
-          }
-        }
-
-      }
-    }
-
-    stage('Building image') {
+    stage('Docker Build') {
+      agent any
       steps {
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
-        }
-
+        sh 'docker build -t jeetdeveloper/spring-petclinic:latest .'
       }
     }
-
-    stage('Deploy Image') {
+    stage('Docker Push') {
+      agent any
       steps {
-        script {
-          docker.withRegistry( '', registryCredential ) {
-            dockerImage.push()
-          }
+        withCredentials([usernamePassword(credentialsId: 'jeetdocker', passwordVariable: 'Jeetdeveloper@18', usernameVariable: 'jeetdeveloper')]) {
+          sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+          sh 'docker push jeetdeveloper/spring-petclinic:latest'
         }
-
       }
     }
-
-    stage('Remove Unused docker image') {
-      steps {
-        bat "docker rmi $registry:$BUILD_NUMBER"
-      }
-    }
-
-  }
-  tools {
-    //maven 'Maven 3.6.3'
-    maven "Maven_Home"
-    docker "Docker_Home"
-  }
-  environment {
-    TESTER = 'placeholder'
-    registry = 'jeetdeveloper/jenkins-phonebook-backend'
-    registryCredential = 'jeetdeveloper'
-    dockerImage = ''
   }
 }

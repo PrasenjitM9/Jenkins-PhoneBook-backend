@@ -68,7 +68,7 @@ pipeline {
   environment {
     TESTER = 'placeholder'
     registry = 'jeetdeveloper/jenkins-phonebook-backend'
-    registryCredential = 'dockerhub'
+    registryCredential = 'jeetdeveloper'
     dockerImage = ''
   }
 }

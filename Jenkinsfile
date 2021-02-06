@@ -4,7 +4,8 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Initiating maven build'
-        sh 'mvn clean install -Dlicense.skip=true'
+        //sh 'mvn clean install -Dlicense.skip=true'
+        bat 'mvn clean install -Dlicense.skip=true'
         echo 'Maven build complete'
       }
     }
@@ -13,7 +14,8 @@ pipeline {
       parallel {
         stage('Test') {
           steps {
-            sh 'mvn clean test'
+            //sh 'mvn clean test'
+            bat 'mvn clean test'
           }
         }
 
@@ -56,7 +58,7 @@ pipeline {
 
     stage('Remove Unused docker image') {
       steps {
-        sh "docker rmi $registry:$BUILD_NUMBER"
+        bat "docker rmi $registry:$BUILD_NUMBER"
       }
     }
 

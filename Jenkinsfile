@@ -10,21 +10,21 @@ pipeline {
         }
       }
       steps {
-        sh 'mvn clean install'
+        bat 'mvn clean install'
       }
     }
     stage('Docker Build') {
       agent any
       steps {
-        sh 'docker build -t jeetdeveloper/spring-petclinic:latest .'
+        bat 'docker build -t jeetdeveloper/spring-petclinic:latest .'
       }
     }
     stage('Docker Push') {
       agent any
       steps {
         withCredentials([usernamePassword(credentialsId: 'jeetdocker', passwordVariable: 'Jeetdeveloper@18', usernameVariable: 'jeetdeveloper')]) {
-          sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-          sh 'docker push jeetdeveloper/spring-petclinic:latest'
+          bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+          bat 'docker push jeetdeveloper/spring-petclinic:latest'
         }
       }
     }

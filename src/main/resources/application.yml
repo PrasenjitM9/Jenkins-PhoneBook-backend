@@ -1,0 +1,13 @@
+data:
+  elasticsearch:
+    repositories:
+      enabled: true
+    cluster-nodes: 127.0.0.1:9300 # 9300 for TCP
+    cluster-name: elasticsearch
+    properties:
+      path:
+        logs: ./elasticsearch/log
+        data: ./elasticsearch/data
+
+
+

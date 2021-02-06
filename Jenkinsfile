@@ -65,8 +65,8 @@ pipeline {
   }
   tools {
     //maven 'Maven 3.6.3'
-    maven "Maven_Home",
-    docker "Docker"
+    maven "Maven_Home"
+    docker "Docker_Home"
   }
   environment {
     TESTER = 'placeholder'

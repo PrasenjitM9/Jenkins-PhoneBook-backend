@@ -65,7 +65,7 @@ pipeline {
   }
   tools {
     //maven 'Maven 3.6.3'
-    maven "Maven_Home"
+    maven "Maven_Home",
     docker "Docker"
   }
   environment {

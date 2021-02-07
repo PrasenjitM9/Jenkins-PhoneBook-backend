@@ -2,14 +2,11 @@
 
 pipeline {
   agent none
-  stages {
-    //
-    stage('Initialize')
-    {
-        def dockerHome = tool 'Docker_Home'
-        def mavenHome  = tool 'Maven_Home'
-       // env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
-    }
+  tools {
+    //maven 'Maven 3.6.3'
+    maven "Maven_Home"
+    docker "Docker_Home"
+  }
     //
     stage('Maven Install') {
       agent {

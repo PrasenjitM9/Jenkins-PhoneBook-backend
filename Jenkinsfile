@@ -7,7 +7,7 @@ pipeline {
     maven "Maven_Home"
     docker "Docker_Home"
   }
-    //
+  stages {
     stage('Maven Install') {
       agent {
         docker {

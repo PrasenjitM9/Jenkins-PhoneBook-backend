@@ -1,37 +1,40 @@
 #!groovy
 
+// Jenkinsfile
 pipeline {
-  agent none
-  tools {
-    //maven 'Maven 3.6.3'
-    maven "Maven_Home"
-    docker "Docker_Home"
+  // Assign to docker slave(s) label, could also be 'any'
+  agent {
+    label 'docker' 
   }
+
   stages {
-    stage('Maven Install') {
+    stage('Docker node test') {
       agent {
         docker {
-          image 'maven:3.5.0'
+          // Set both label and image
+          label 'docker'
+          image 'node:7-alpine'
+          args '--name docker-node' // list any args
         }
       }
       steps {
-        bat 'mvn clean install'
+        // Steps run in node:7-alpine docker container on docker slave
+        sh 'node --version'
       }
     }
-    stage('Docker Build') {
-      agent any
-      steps {
-        bat 'docker build -t jeetdeveloper/spring-petclinic:latest .'
-      }
-    }
-    stage('Docker Push') {
-      agent any
-      steps {
-        withCredentials([usernamePassword(credentialsId: 'jeetdocker', passwordVariable: 'Jeetdeveloper@18', usernameVariable: 'jeetdeveloper')]) {
-          bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-          bat 'docker push jeetdeveloper/spring-petclinic:latest'
+
+    stage('Docker maven test') {
+      agent {
+        docker {
+          // Set both label and image
+          label 'docker'
+          image 'maven:3-alpine'
         }
+      }
+      steps {
+        // Steps run in maven:3-alpine docker container on docker slave
+        sh 'mvn --version'
       }
     }
   }
-}
+} 

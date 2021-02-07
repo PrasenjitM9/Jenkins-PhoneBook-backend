@@ -1,6 +1,10 @@
 pipeline {
   // "Top-level" agent is assigned to docker slaves via Jenkins pipeline configuration
   agent none
+  tools {
+    maven "Maven_Home"
+    docker "docker"
+  }
 
   stages {
     stage('Docker node test') {
